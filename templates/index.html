@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+
+<head>
+    <title>NZ-MAFIA-TWO / live</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            padding: 0;
+            margin: 0;
+            background-color: black;
+            opacity: 0;
+            transition: all 1s;
+            overflow: hidden;
+        }
+
+        .page {
+            width: 100vw;
+            height: 100%
+        }
+
+        .logo {
+            width: 100%;
+            color: white;
+            height: 10%;
+            font-family: 'Montserrat';
+            font-weight: 900;
+            display: flex;
+            font-size: 30px;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            box-shadow: -1px 13px 13px 6px rgba(0, 0, 0, 0.75);
+            -webkit-box-shadow: -1px 13px 13px 6px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: -1px 13px 13px 6px rgba(0, 0, 0, 0.75);
+            z-index: 100;
+        }
+
+        #calculator,
+        #general,
+        #tos,
+        #groups,
+        #network_err,
+        #create-group,
+        #message-group-iso {
+            display: none;
+            background-color: black;
+            opacity: 0;
+            transition: all 0.7s ease-in-out;
+            width: 100%;
+            height: 100%;
+        }
+
+        .nav {
+            width: 100%;
+            background-color: black;
+            height: 34px;
+            -webkit-app-region: drag
+        }
+
+        .rest {
+            width: 100%;
+            height: calc(100% - 34px);
+        }
+
+        .message-script-content,
+        .message-script-groups {
+            width: calc(100% - 20px);
+            font-family: 'Montserrat';
+            height: 80%;
+            font-size: 15px;
+            color: rgb(96, 95, 95);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            flex-direction: column-reverse;
+            overflow-y: scroll;
+
+        }
+
+        .enter {
+            width: 100%;
+            height: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .message-script-content::-webkit-scrollbar,
+        #content-groups::-webkit-scrollbar,
+        .message-script-groups::-webkit-scrollbar {
+            display: none;
+        }
+
+        .enter button {
+            width: 80%;
+            height: 80%;
+            border: none;
+            outline: 0;
+            border-radius: 20px;
+            font-family: 'Montserrat';
+            font-weight: 600;
+            color: rgb(255, 255, 255);
+            background: linear-gradient(to right, rgb(19, 59, 55), rgb(56, 21, 59));
+        }
+
+        .content {
+            width: 100%;
+            height: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .button-ent,
+        .button-ent-groups-iso {
+            width: 37px;
+            height: 37px;
+            background-color: #0F0F0F;
+            outline: 0;
+            border: 2px solid #282828;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #main-enter,
+        #main-enter-groups-iso {
+            width: 65%;
+            background-color: #0F0F0F;
+            border-radius: 20px;
+            height: 70%;
+            outline: none;
+            border: 2px solid #282828;
+            color: white;
+            font-family: 'Roboto';
+            padding-left: 10px;
+        }
+
+        .message,
+        .message-self {
+            margin-left: 10px;
+            margin-bottom: 5px;
+            color: white;
+            padding: 5px 10px;
+            border-bottom: solid 2px rgb(10, 10, 10);
+            background-color: rgb(10, 10, 10);
+            /*background: linear-gradient(to right, rgb(19, 59, 55), rgb(56, 21, 59));*/
+            border-radius: 20px;
+            font-family: 'Roboto', sans-serif;
+            width: fit-content;
+            max-width: 50%;
+            font-size: 13px;
+            transition: all 0.7s
+        }
+
+        .message-self {
+            margin-left: auto;
+            background: linear-gradient(to right, rgb(19, 59, 55), rgb(56, 21, 59));
+        }
+
+        .message #message,
+        .message-self #message {
+            width: 100%;
+            height: 100%;
+            overflow-wrap: break-word;
+            transition: all 0.7s
+        }
+
+        .message .title,
+        .message-self .title {
+            width: 100%;
+            height: 0px;
+            display: flex;
+            align-items: end;
+            justify-content: left;
+            color: rgb(36, 36, 36);
+            font-size: 11px;
+            flex-wrap: nowrap;
+            padding-left: 5px;
+            padding-right: 5px;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.7s;
+            width: 0px;
+        }
+
+        .message-self .title {
+            color: grey;
+        }
+
+        .message .title .timestamp,
+        .message-self .title .timestamp {
+            margin-right: 5px;
+        }
+
+        #groups {
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: none;
+            transition: all 0.7s;
+        }
+
+        #content-groups {
+            width: 100%;
+            height: 90%;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        #item-groups {
+            max-width: 100%;
+            background-color: black;
+            padding: 0px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Roboto';
+            margin-bottom: 10px;
+            color: white
+        }
+
+        #groups-item-input-password {
+            outline: none;
+            border: none;
+            height: 20px;
+            font-family: 'Roboto';
+            background-color: #0F0F0F;
+            border: 2px solid #282828;
+            border-radius: 20px;
+            padding: 0px 5px;
+            color: white;
+        }
+
+        .logo-tos {
+            max-width: 100%;
+            max-height: 15%;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding: 0px 10px;
+        }
+
+        .tos-script {
+            width: 100%;
+            font-family: 'Montserrat';
+            height: 75%;
+            font-size: 15px;
+            color: rgb(145, 145, 145);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            flex-direction: column-reverse;
+            font-size: 11px;
+
+        }
+
+        .block-tos {
+            max-width: 100%;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            color: rgb(148, 148, 148);
+            overflow-wrap: break-word;
+        }
+
+        .block-tos a {
+            text-decoration: none;
+            color: rgb(193, 65, 204);
+            user-select: none;
+
+        }
+
+        .block-tos a:hover {
+            text-decoration: underline;
+            color: rgb(39, 116, 109);
+
+        }
+
+
+        #network_err {
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            flex-wrap: wrap;
+
+        }
+
+        #network_err .icon {
+            width: 100%;
+            height: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        #network_err .icon img {
+            height: 100%;
+        }
+
+        #network_err .code {
+            width: 100%;
+            color: rgb(21, 21, 21);
+            height: 5%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #network_err .message-desc {
+            max-width: 100%;
+            font-size: 15px;
+            font-family: 'Roboto';
+            color: white;
+            padding: 0px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav"></div>
+    <div class="rest">
+        <div id="calculator" class="page">
+        </div>
+        <div id="general" class="page">
+            <div class="logo">
+                OPEN-CHAT
+            </div>
+            <div class="message-script-content" id="content">
+
+            </div>
+            <div class="content">
+                <input type="text" id="main-enter" placeholder="Message NZ-Mafia">
+                <button id="ent" class="button-ent">
+                    <img src="enter.svg" alt="">
+                </button>
+                <button id="ent-groups" class="button-ent">
+                    <img src="groups.svg" alt="">
+                </button>
+            </div>
+        </div>
+        <div id="tos" class="page">
+            <div class="logo-tos">Agree to open-chat's terms and policies</div>
+            <div class="tos-script">
+                <div class="block-tos">
+                    Welcome to open-chat a fully encrypted chatting service. <a id="full-info">Learn more</a>
+                </div>
+
+                <div class="block-tos">
+                    By clicking I agree, you agree to NZ-Mafia's
+                    <a id="full-toscoc">Code of Conduct</a>
+                    as well as the
+                    required
+                    <a id="full-toscoc">Terms of Service</a>
+
+                </div>
+                <div class="block-tos">
+                    Our best interest is your privacy and we take pride in keeping your information hidden to others
+                    while
+                    providing a safe space for free speech. This app will not work if you are using a vpn or proxy.
+                </div>
+                <div class="block-tos">
+                    This app will only work on the RHS_BYOD wifi network. this chat cannot be taken down in any way by
+                    teachers
+                    and
+                    if you are experencing problems please email at <a id="full-toscoc">redacted</a>
+                </div>
+
+                <div class="block-tos">
+                    You will be asked to accept out ToS and our CoC each time you open the app, that way we
+                    can ensure full understanding of your rights and regulations.
+                    <a id="full-info">Learn more</a>
+                </div>
+
+                <div class="block-tos">
+                    if at any time you feel like you do not want to accept to the ToS and CoC you can close this window
+                </div>
+            </div>
+            <div class="enter">
+                <button id="enter">I Agree</button>
+            </div>
+        </div>
+        <div id="groups">
+            <div class="logo">OPEN-CHAT</div>
+            <div id="content-groups"></div>
+        </div>
+        <div id="network_err">
+            <div class="icon">
+                <img src="nowifi.svg" alt="" draggable="false">
+            </div>
+            <div class="code">ERR_BAD_NETWORK</div>
+            <div class="message-desc">
+                Are you connected to the internet?
+            </div>
+        </div>
+        <!--div id="create-group">
+            <div class="bar-group-create">
+                <div class="close-group-create"></div>
+                <div class="text-group-create">
+                    Create group
+                </div>
+            </div>
+            <div class="title-create-group">Create a group</div>
+            <div class="input-group-name">
+                <div class="group-create-text-input">Give your group a name</div>
+                <input type="text" placeholder="Group name">
+            </div>
+            <div class="input-group-password">
+                <div class="group-create-text-input">Password Protect your group</div>
+                <input type="password" placeholder="Password">
+            </div>
+            <button id="create-group-btn-real">
+                Create Group
+            </button>
+            <div class="hint"> you can try to spam this our servers can handle it.</div>
+        </div-->
+        <div id="message-group-iso">
+            <div class="logo">OPEN-CHAT</div>
+            <div class="message-script-groups" id="content-groups-content"></div>
+            <div class="content">
+                <input type="text" id="main-enter-groups-iso" name="group-input-change" placeholder="Message General">
+                <button id="ent" class="button-ent-groups-iso">
+                    <img src="enter.svg" alt="">
+                </button>
+                <button id="ent-groups-ent-iso" class="button-ent">
+                    <img src="groups.svg" alt="">
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let key_enc;
+            async function fetchKey() {
+                try {
+                    const response = await fetch(`http://127.0.0.1:5000/pr1v4t3`);
+                    key_enc = await response.text();
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            async function getData(endpoint) {
+                if (!key_enc) {
+                    console.error("key_enc is not available. Waiting for it...");
+                    await fetchKey(); // Wait for key_enc to be available
+                }
+                if (key_enc) {
+                    try {
+                        const response = await fetch(`http://127.0.0.1:5000/${key_enc}${endpoint}`);
+                        return await response.text();
+                    } catch (error) {
+                        console.error(error);
+                    }
+                } else {
+                    console.error("key_enc is still not available");
+                    throw new Error("Key not available");
+                }
+            }
+
+            let intervalId = setInterval(() => {
+                getData("/alive").then(function (data) {
+                    if (data == "yes") {
+                        document.getElementsByTagName("body")[0].style.opacity = 1
+                        clearInterval(intervalId);
+                        getData("/network").then(function (data) {
+                            if (data !== "RHS_BYOD") {
+                                four_o_four.style.display = 'flex';
+                                four_o_four.style.opacity = 1;
+                            } else {
+                                tos.style.display = 'block';
+                                tos.style.opacity = 1;
+                            }
+                        })
+                    }
+                })
+            }, 100);
+            let group_while_listen = "";
+            const tos = document.getElementById("tos");
+            const general = document.getElementById("general");
+            const calculator = document.getElementById("calculator");
+            const groups = document.getElementById("groups");
+            const groups_btn = document.getElementById("ent-groups");
+            const four_o_four = document.getElementById("network_err");
+
+            const enter_btn = document.getElementById("ent");
+            const input_main = document.getElementById("main-enter");
+            document.getElementById("enter").addEventListener("click", () => {
+                tos.remove();
+                general.style.display = 'block';
+                general.style.opacity = 1;
+                const access = document.getElementById("content");
+                access.scrollTo({ left: 0, top: access.scrollHeight, behavior: "smooth" });
+            });
+
+            let lastDisplayedTimestamp = null; // Initialize the last displayed timestamp
+
+            function post_gen(data) {
+                let isScrolledToBottom;
+
+                try {
+                    const parsedData = JSON.parse(data); // Parse the JSON data
+                    getData("/socket").then(function (ip_addr) {
+                        const sortedEntries = Object.entries(parsedData)
+                            .map(([key, entry]) => ({
+                                key,
+                                date: new Date(entry.date),
+                                timestamp: entry.date,
+                                message: entry.message || "", // Ensure message property is defined
+                                ip: entry.ip,
+                            }))
+                            .sort((a, b) => a.date - b.date);
+
+                        const access = document.getElementById("content");
+
+                        isScrolledToBottom = access.scrollHeight - access.clientHeight <= access.scrollTop + 1;
+
+                        sortedEntries.forEach(entry => {
+                            if (!lastDisplayedTimestamp || entry.date > lastDisplayedTimestamp) {
+                                const messageDiv = document.createElement('div');
+                                const messageClass = entry.ip === ip_addr ? 'message-self' : 'message';
+                                messageDiv.classList.add(messageClass);
+                                entry.message = entry.message.replace(/P405&Q/g, '?').replace(/P405&S1/g, '/').replace(/P405&S2/g, '\\') || "";
+                                messageDiv.innerHTML = `<div id="message">${entry.message}</div> <div class="title"><div class="user">${entry.timestamp}</div></div>`;
+                                access.appendChild(messageDiv);
+                                lastDisplayedTimestamp = entry.date;
+                            }
+                        });
+
+                        if (isScrolledToBottom) {
+                            access.scrollTo({ left: 0, top: access.scrollHeight, behavior: "smooth" });
+                        }
+                    })
+                } catch (error) {
+                    console.error("An error occurred:", error);
+                }
+            }
+
+
+
+            setInterval(() => {
+                getData("/general")
+                    .then(
+                        function (data) {
+                            post_gen(data)
+                        }
+                    )
+            }, 1000)
+            window.addEventListener('keyup', function (event) {
+                if (event.keyCode === 13 && general.style.display === 'block') {
+                    if (input_main.value == "/key P301&C") {
+                        getData("/clear");
+                        input_main.value = '';
+                    } else {
+                        let input_enter = input_main.value.replace(/\?/g, "P405&Q");
+                        input_enter = input_enter.replace(/\//g, "P405&S1");
+                        input_enter = input_enter.replace(/\\/g, "P405&S2");
+
+                        getData(`/send/${input_enter}`);
+                        input_main.value = '';
+                    }
+                }
+            });
+
+            enter_btn.addEventListener("click", () => {
+                if (general.style.display == 'block') {
+                    if (input_main.value == "/key P301&C") {
+                        getData("/clear");
+                        input_main.value = '';
+                    } else {
+                        const input_enter = input_main.value.replace("?", "P405&Q");
+                        getData(`/send/${input_enter}`)
+                        input_main.value = '';
+                    }
+                }
+            });
+            groups_btn.addEventListener("click", () => {
+                general.style.opacity = 0;
+                setTimeout(() => {
+                    general.style.display = 'none';
+                    groups.style.display = 'block';
+                    setTimeout(() => {
+                        groups.style.opacity = 1;
+                    }, 100)
+                }, 700)
+            })
+            // Add event listener to the container element that holds all messages
+            const messagesContainer = document.getElementById('content');
+
+            messagesContainer.addEventListener('click', function (event) {
+                const clickedElement = event.target.closest('.message, .message-self');
+
+                if (clickedElement) {
+                    // Change the background color of the clicked message element
+                    const messageContent = clickedElement.querySelector('#message');
+                    const title = clickedElement.querySelector('.title');
+
+                    if (title.style.height !== '15px') {
+                        messageContent.style.height = 'calc(100% - 15px)';
+                        title.style.height = '15px';
+                        title.style.opacity = '1';
+                        title.style.width = 'unset';
+                    } else {
+                        messageContent.style.height = '100%'; // Reset to default height
+                        title.style.height = '0px'; // Reset to default height
+                        title.style.opacity = '0'; // Reset to default opacity
+                        title.style.width = '0px'
+                    }
+                }
+            });
+            const btn_links = document.querySelectorAll("#full-toscoc");
+            btn_links.forEach(btn_link => {
+                btn_link.addEventListener("click", () => {
+                    getData('/open_tos');
+                });
+            });
+            const btn_links2 = document.querySelectorAll("#full-info");
+            btn_links2.forEach(btn_link => {
+                btn_link.addEventListener("click", () => {
+                    getData('/open_full');
+                });
+            });
+            function appendToContentGroups(dataObject) {
+                const element = document.getElementById("content-groups");
+                element.innerHTML = ""
+
+                // Check if dataObject is a string and parse it into an object if needed
+                if (typeof dataObject === "string") {
+                    try {
+                        dataObject = JSON.parse(dataObject);
+                    } catch (error) {
+                        console.error("Error parsing JSON:", error);
+                        return; // Exit the function if parsing fails
+                    }
+                }
+
+                for (const key in dataObject) {
+                    if (dataObject.hasOwnProperty(key)) {
+                        const name = dataObject[key].name;
+                        const password = dataObject[key].password;
+
+                        // Create a new div element for each item in dataObject
+                        const newItem = document.createElement("div");
+                        newItem.id = "item-groups";
+                        newItem.innerHTML = `<div class="item-groups-title">${name}</div><input placeholder="password" id="groups-item-input-password">`;
+
+                        // Append the new item to the container
+                        element.appendChild(newItem);
+                    }
+                }
+            }
+
+
+
+
+            getData("/groups_list").then(
+                function (data) {
+                    appendToContentGroups(data)
+                }
+            )
+            setInterval(() => {
+                getData("/groups_list").then(
+                    function (data) {
+                        appendToContentGroups(data)
+                    }
+                )
+            }, 10000)
+            let lastDisplayedTimestamp_group = null; // Initialize the last displayed timestamp
+            function formatDate(inputDate) {
+                const date = new Date(inputDate);
+                const day = date.getDate();
+                const month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
+                const year = date.getFullYear().toString().substr(-2);
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+
+                const formattedDate = `${day}/${month}-${hours}:${minutes}`;
+                return formattedDate;
+            }
+            function post_gen_group(data, resetMemory = false) {
+                let isScrolledToBottom;
+
+                if (resetMemory) {
+                    // Reset memory here
+                    lastDisplayedTimestamp_group = null;
+                }
+
+                try {
+                    const parsedData = JSON.parse(data); // Parse the JSON data
+                    getData("/socket").then(function (ip_addr) {
+                        const sortedEntries = Object.entries(parsedData)
+                            .map(([key, entry]) => ({
+                                key,
+                                date: new Date(entry.date),
+                                timestamp: formatDate(entry.date),
+                                message: entry.message || "", // Ensure the message property is defined
+                                ip: entry.ip,
+                                username: entry.user,
+                            }))
+                            .sort((a, b) => a.date - b.date);
+                        const access = document.getElementsByClassName("message-script-groups")[0];
+                        isScrolledToBottom = access.scrollHeight - access.clientHeight <= access.scrollTop + 1;
+                        sortedEntries.forEach(entry => {
+                            if (!lastDisplayedTimestamp_group || entry.date > lastDisplayedTimestamp_group) {
+                                const messageDiv = document.createElement('div');
+                                const messageClass = entry.ip === ip_addr ? 'message-self' : 'message';
+                                messageDiv.classList.add(messageClass);
+                                entry.message = entry.message.replace(/P405&Q/g, '?').replace(/P405&S1/g, '/').replace(/P405&S2/g, '\\') || "";
+                                messageDiv.innerHTML = `<div id="message">${entry.message}</div> <div class="title"><div class="user">${entry.timestamp},  ${entry.username}</div></div>`;
+                                access.appendChild(messageDiv);
+                                lastDisplayedTimestamp_group = entry.date;
+                            }
+                        });
+
+                        if (isScrolledToBottom) {
+                            access.scrollTo({ left: 0, top: access.scrollHeight, behavior: "smooth" });
+                        }
+                    })
+                } catch (error) {
+                    console.error("An error occurred:", error);
+                }
+            }
+            let groupChatInterval; // Variable to hold the setInterval reference
+            let sendMessageListener; // Variable to hold the sendMessage event listener
+            let enterKeyListener; // Variable to hold the Enter key event listener
+
+            function openGroupChat(groupName, groupPassword) {
+                const access = document.getElementsByClassName("message-script-groups")[0];
+                access.innerHTML = '';
+                post_gen_group("", true);
+
+                // Clear the existing interval if it exists
+                if (groupChatInterval) {
+                    clearInterval(groupChatInterval);
+                }
+
+                // Remove previous event listeners if they exist
+                if (sendMessageListener) {
+                    document.getElementsByClassName("button-ent-groups-iso")[0].removeEventListener("click", sendMessageListener);
+                }
+                if (enterKeyListener) {
+                    window.removeEventListener('keyup', enterKeyListener);
+                }
+
+                // Function to handle sending messages
+                function sendMessage() {
+                    const input_main_groups = document.getElementById("main-enter-groups-iso");
+                    const input_enter = input_main_groups.value.replace("?", "P405&Q");
+                    console.log('Input Value:', input_main_groups.value);
+                    getData(`/send_group/${input_enter}/${groupName}/${groupPassword}`);
+                    input_main_groups.value = '';
+                }
+
+                // Add new event listeners
+                sendMessageListener = sendMessage;
+                document.getElementsByClassName("button-ent-groups-iso")[0].addEventListener("click", sendMessage);
+
+                // Handle Enter key press to send messages
+                enterKeyListener = function (event) {
+                    if (event.keyCode === 13) {
+                        sendMessage();
+                    }
+                };
+                window.addEventListener('keyup', enterKeyListener);
+
+                // Confirm that the server password is correct
+                getData(`/check_pass_group/${groupName}/${groupPassword}`)
+                    .then(function (state) {
+                        if (state == 'true') {
+                            document.getElementsByName("group-input-change")[0].placeholder = `Message ${groupName}`;
+                            groups.style.opacity = 0;
+                            const group_iso = document.getElementById("message-group-iso");
+                            setTimeout(() => {
+                                groups.style.display = 'none';
+                                group_iso.style.display = 'block';
+
+                                // Set up a new interval for fetching messages
+                                groupChatInterval = setInterval(() => {
+                                    getData(`/message_get/${groupName}`).then(function (messagedata) {
+                                        post_gen_group(messagedata, false);
+                                    });
+                                }, 1000);
+
+                                setTimeout(() => {
+                                    group_iso.style.opacity = 1;
+                                }, 100);
+                            }, 700);
+                        }
+                    });
+            }
+            // Add a click event listener to the document
+            document.addEventListener('click', function (event) {
+                const target = event.target;
+
+                // Check if the clicked element is an input element
+                if (target.tagName === 'INPUT') {
+                    // Add a keyup event listener to the input
+                    target.addEventListener('keyup', function (event) {
+                        // Check if Enter key (key code 13) is pressed
+                        if (event.keyCode === 13) {
+                            // Find the associated title element by going to the previous sibling
+                            const nameElement = target.previousElementSibling;
+
+                            // Check if the previous sibling is the title element
+                            if (nameElement && nameElement.classList.contains('item-groups-title')) {
+                                // Get the name from the title element
+                                const name = nameElement.textContent.trim();
+                                // Get the input value
+                                const inputValue = target.value;
+
+                                // Log the name and input value
+                                openGroupChat(name, inputValue)
+                            }
+                        }
+                    });
+                }
+            });
+            // Add event listener to the container element that holds all messages
+            const messagesContainers = document.getElementById('content-groups-content');
+
+            messagesContainers.addEventListener('click', function (event) {
+                const clickedElement = event.target.closest('.message, .message-self');
+
+                if (clickedElement) {
+                    // Change the background color of the clicked message element
+                    const messageContent = clickedElement.querySelector('#message');
+                    const title = clickedElement.querySelector('.title');
+
+                    if (title.style.height !== '15px') {
+                        messageContent.style.height = 'calc(100% - 15px)';
+                        title.style.height = '15px';
+                        title.style.opacity = '1';
+                        title.style.width = 'unset';
+                    } else {
+                        messageContent.style.height = '100%'; // Reset to default height
+                        title.style.height = '0px'; // Reset to default height
+                        title.style.opacity = '0'; // Reset to default opacity
+                        title.style.width = '0px'
+                    }
+                }
+            });
+            const group_return = document.getElementById("ent-groups-ent-iso");
+            const group_iso = document.getElementById("message-group-iso")
+            group_return.addEventListener("click", () => {
+                group_iso.style.opacity = 0;
+                setTimeout(() => {
+                    group_iso.style.display = 'none';
+                    general.style.opacity = 1;
+                    setTimeout(() => {
+                        general.style.display = 'block';
+                    }, 700)
+                }, 700)
+            })
+        })
+    </script>
+</body>
+
+</html>
