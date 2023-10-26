@@ -31,7 +31,7 @@ key_enc = f'{encrypt_string(IPAddr)}{encrypt_string(hostname)}'
 # Initialize Firebase Admin SDK with your credentials
 cred = credentials.Certificate(creds_json)
 firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://nz-mafia-9682d-default-rtdb.asia-southeast1.firebasedatabase.app/'
+    'databaseURL': ''
 })
 
 # Define a route to return the contents of /general
