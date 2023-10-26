@@ -1,13 +1,5 @@
 # OPEN-CHAT
-this is an open-source chat application made by me alone, it has a general chat aswell as private chat servers
-please email any issues or complaints to ```tkf.x1os@gmail.com``` 
-## knowen errors 
-### network error screen when app is opened
-this is due to an invalid network or reigion to fix this pelase wait for a new version fo the app to release
-
-### ToS & CoC screen not closing when trying to access the ```group``` tab
-this is error T903&H and has not currently been relsolved
-
+welcome to OPEN-CHAT, this appliaction is a private chat aplication that is most likly unblocked on a restricted network, some uses may be if your school blocks other messaging services. This project is only maintained by me so it has a delay inbetween updates having about 1-3 every 2 weeks. if you have any questions or issues then send an email to ```tkf.x1os@gmail.com```
 
 # installation 
 navigate to the releases tab and download the latest version, after downloading run the file to start the setup, after a few minutues the application main window will start. 
