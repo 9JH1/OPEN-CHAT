@@ -1,4 +1,5 @@
-# OPEN-CHAT
-> deprecated, may not work as expected
-### open chat is a simple chating appliction with limited features,
-### use at own risk, I might rework the whole thing sometime idk.
+# welcome to open chat
+
+this is a simple electron and firebase, it is now not maintained and may not work as expected
+![ main chat](img/image.png)
+![ main chat](img/image2.png)
